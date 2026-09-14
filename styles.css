@@ -1,0 +1,21 @@
+.pantalla {
+  display: none;
+}
+
+.pantalla.activa {
+  display: block;
+}
+
+.oculto {
+  display: none;
+}
+
+.correcta {
+  background-color: #2e7d32;
+  color: white;
+}
+
+.incorrecta {
+  background-color: #c62828;
+  color: white;
+}
