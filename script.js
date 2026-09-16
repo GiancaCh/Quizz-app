@@ -256,7 +256,7 @@ function mostrar_edicion() {
 }
 
 // Antes de agrega se guarda lo que el usuario ya había escrito para no perderlo
-ñfunction agregar_pregunta() {
+function agregar_pregunta() {
   guardar_campos_en_editando();
 
   preguntas_editando.push({
