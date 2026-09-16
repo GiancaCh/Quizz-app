@@ -10,12 +10,217 @@
   display: none;
 }
 
-.correcta {
-  background-color: #2e7d32;
+#contenedor_opciones button.correcta {
+  background-color: #0A8754;
   color: white;
 }
 
-.incorrecta {
-  background-color: #c62828;
+#contenedor_opciones button.incorrecta {
+  background-color: #BA1B1D;
   color: white;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: white;
+}
+
+/* Pantalla 1 (la del incio) */
+#pantalla_inicio {
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(to top left, #275DAD, #05070d 70%);
+}
+
+#pantalla_inicio.activa {
+  display: flex;
+}
+
+#pantalla_inicio h1 {
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  font-size: 56px;
+  margin: 0;
+}
+
+#pantalla_inicio p {
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 15px;
+  color: #cfd6e4;
+  margin-top: 12px;
+  margin-bottom: 40px;
+}
+
+#pantalla_inicio button {
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  padding: 16px 40px;
+  margin: 8px;
+  border: 2px solid #275DAD;
+  border-radius: 50px;
+  background-color: #275DAD;
+  color: white;
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
+}
+
+#pantalla_inicio button:hover {
+  background-color: white;
+  color: #275DAD;
+  transform: translateY(-3px);
+}
+
+/* Pantalla 2 (la de las preguntas) */
+#pantalla_quiz {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 40px;
+  background: linear-gradient(to top left, #275DAD, #05070d 70%);
+  color: white;
+  position: relative;
+}
+
+#contador_pregunta {
+  font-weight: bold;
+  font-size: 22px;
+  color: #275DAD;
+}
+
+#racha_actual {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  font-weight: bold;
+  font-size: 22px;
+  color: #c65a00;
+}
+
+#tarjeta_pregunta {
+  max-width: 90%;
+  margin: 40px auto;
+  padding: 24px;
+  border: 2px solid #275DAD;
+  border-radius: 20px;
+  text-align: center;
+}
+
+#texto_pregunta {
+  color: #275DAD;
+  margin-top: 0;
+}
+
+#contenedor_opciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+#contenedor_opciones button {
+  width: 40%;
+  padding: 16px;
+  border: 2px solid #275DAD;
+  border-radius: 15px;
+  background-color: white;
+  color: #275DAD;
+  font-size: 15px;
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
+}
+
+#contenedor_opciones button:hover {
+  background-color: #275DAD;
+  color: white;
+  transform: translateY(-3px);
+}
+
+#texto_feedback {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+#boton_siguiente {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  padding: 20px 46px;
+  font-size: 19px;
+  border: none;
+  border-radius: 15px;
+  background-color: #275DAD;
+  color: white;
+}
+
+#boton_siguiente:hover {
+  background-color: white;
+  color: #275DAD;
+  transform: translateY(-3px);
+}
+
+/* Pantalla 3 (resultados del quiz) */
+#pantalla_resultados {
+  min-height: 100vh;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(to top left, #275DAD, #05070d 70%);
+  color: white;
+}
+
+#pantalla_resultados.activa {
+  display: flex;
+}
+
+/* pantalla 4 (editar preguntas) */
+#pantalla_editar {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 40px;
+  background: linear-gradient(to top left, #275DAD, #05070d 70%);
+  color: white;
+}
+
+#pantalla_resultados button {
+  font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  padding: 16px 40px;
+  margin: 8px;
+  border: 2px solid #275DAD;
+  border-radius: 50px;
+  background-color: #275DAD;
+  color: white;
+  transition: transform 0.2s, background-color 0.2s, color 0.2s;
+}
+
+#pantalla_resultados button:hover {
+  background-color: white;
+  color: #275DAD;
+  transform: translateY(-3px);
+}
+
+/* Para tablet */
+@media (min-width: 768px) {
+  #tarjeta_pregunta {
+    max-width: 600px;
+    padding: 40px;
+  }
+}
+
+/* Para desktop */
+@media (min-width: 1024px) {
+  #tarjeta_pregunta {
+    max-width: 750px;
+    margin: 80px auto;
+    padding: 60px;
+    border-radius: 30px;
+  }
 }

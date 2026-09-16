@@ -1,4 +1,4 @@
-// ===== 1. DATOS DEL QUIZ =====
+// preguntas
 const preguntas = [
   {
     pregunta: "¿Cada cuántos años se celebra el Mundial de fútbol?",
@@ -16,28 +16,33 @@ const preguntas = [
     correcta: 2
   },
   {
-    pregunta: "¿Cuántos sets se necesitan ganar para ganar un partido de tenis (al mejor de 5)?",
-    opciones: ["2", "3", "4", "5"],
-    correcta: 1
+    pregunta: "¿Qué selección tiene más Mundiales de fútbol ganados?",
+    opciones: ["Alemania", "Argentina", "Italia", "Brasil"],
+    correcta: 3
   },
   {
-    pregunta: "¿Qué deporte se juega en Wimbledon?",
-    opciones: ["Golf", "Tenis", "Rugby", "Criquet"],
-    correcta: 1
+    pregunta: "¿En qué deporte se utiliza un objeto llamado volante o plumilla en lugar de una pelota?",
+    opciones: ["Golf", "Tenis", "Hockey", "Bádminton"],
+    correcta: 3
   }
 ];
 
-// ===== 2. VARIABLES QUE VAN CAMBIANDO MIENTRAS SE JUEGA =====
+// Copia temporal de las preguntas q se guardan en el array principal una vez que se guardaron los cambios al editar
+let preguntas_editando = [];
+
+// Variables que cambian
 let indice_actual = 0;
 let puntaje = 0;
 let respondida = false;
+let racha = 0; // lo de las rachas fue hecho con ayuda de IA
+let racha_mas_alta = 0;
 let campos_edicion = [];
 
-// ===== 3. AGARRAR LOS ELEMENTOS DEL HTML =====
+// Los queryselectro
 const texto_pregunta = document.querySelector('#texto_pregunta');
 const contenedor_opciones = document.querySelector('#contenedor_opciones');
 const contador_pregunta = document.querySelector('#contador_pregunta');
-const puntaje_actual = document.querySelector('#puntaje_actual');
+const racha_actual = document.querySelector('#racha_actual');
 const mensaje_respuesta = document.querySelector('#texto_feedback');
 const boton_siguiente = document.querySelector('#boton_siguiente');
 
@@ -50,13 +55,16 @@ const boton_empezar = document.querySelector('#boton_empezar');
 const boton_editar = document.querySelector('#boton_editar');
 
 const pantalla_resultados_texto = document.querySelector('#texto_puntaje_final');
+const texto_racha_final = document.querySelector('#texto_racha_final');
 const boton_reiniciar = document.querySelector('#boton_reiniciar');
+const boton_reintentar = document.querySelector('#boton_reintentar');
 
 const contenedor_edicion = document.querySelector('#contenedor_edicion');
+const boton_agregar_pregunta = document.querySelector('#boton_agregar_pregunta');
 const boton_guardar_edicion = document.querySelector('#boton_guardar_edicion');
 const boton_volver_inicio = document.querySelector('#boton_volver_inicio');
 
-// ===== 4. FUNCIÓN PARA CAMBIAR DE PANTALLA =====
+// Funcion para cambiar entre las pantallas
 function cambiar_pantalla(pantalla_a_mostrar) {
   pantalla_inicio.classList.remove('activa');
   pantalla_quiz.classList.remove('activa');
@@ -66,7 +74,7 @@ function cambiar_pantalla(pantalla_a_mostrar) {
   pantalla_a_mostrar.classList.add('activa');
 }
 
-// ===== 5. FUNCIÓN QUE MUESTRA LA PREGUNTA ACTUAL =====
+// Funciones para las preguntas
 function mostrar_pregunta() {
   const pregunta_actual = preguntas[indice_actual];
 
@@ -94,7 +102,6 @@ function mostrar_pregunta() {
   boton_siguiente.classList.add('oculto');
 }
 
-// ===== 6. FUNCIÓN QUE SE EJECUTA CUANDO SE ELIGE UNA OPCIÓN =====
 function seleccionar_opcion(indice_opcion, boton_opcion) {
   if (respondida) {
     return;
@@ -107,11 +114,14 @@ function seleccionar_opcion(indice_opcion, boton_opcion) {
     boton_opcion.classList.add('correcta');
     mensaje_respuesta.textContent = '¡Correcto!';
     puntaje = puntaje + 1;
-    puntaje_actual.textContent = `Puntaje: ${puntaje}`;
+    racha = racha + 1;
   } else {
     boton_opcion.classList.add('incorrecta');
     mensaje_respuesta.textContent = 'Respuesta incorrecta, inténtalo la próxima.';
+    racha = 0;
   }
+
+  actualizar_racha();
 
   if (indice_actual === preguntas.length - 1) {
     boton_siguiente.textContent = 'Finalizar';
@@ -122,30 +132,77 @@ function seleccionar_opcion(indice_opcion, boton_opcion) {
   boton_siguiente.classList.remove('oculto');
 }
 
-// ===== 7. RESULTADOS Y REINICIO =====
+function actualizar_racha() {
+  if (racha > racha_mas_alta) {
+    racha_mas_alta = racha;
+  }
+
+  if (racha >= 2) {
+    racha_actual.textContent = `Racha actual: ${racha} 🔥`;
+  } else {
+    racha_actual.textContent = '';
+  }
+}
+
+// Funciones para mostrar resultados y reiniciar el quiz
 function mostrar_resultados() {
   const preguntas_malas = preguntas.length - puntaje;
 
   pantalla_resultados_texto.textContent =
     `Respondiste correctamente ${puntaje} de ${preguntas.length} preguntas. (Buenas: ${puntaje} · Malas: ${preguntas_malas})`;
+
+  let mensaje_racha = '';
+
+  if (racha_mas_alta >= 4) {
+    mensaje_racha = `¡Guau! Tu mejor racha fue de ${racha_mas_alta} 🔥`;
+  } else if (racha_mas_alta >= 2) {
+    mensaje_racha = `Tuviste una racha de ${racha_mas_alta}, bien 🔥`;
+  } else {
+    mensaje_racha = 'Puedes mejorar tu racha la próxima vez.';
+  }
+
+  texto_racha_final.textContent = mensaje_racha;
 }
 
 function reiniciar_quiz() {
   indice_actual = 0;
   puntaje = 0;
-  puntaje_actual.textContent = `Puntaje: ${puntaje}`;
+  racha = 0;
+  racha_mas_alta = 0;
+  racha_actual.textContent = '';
 
   mostrar_pregunta();
   cambiar_pantalla(pantalla_inicio);
 }
 
-// ===== 8. EDITAR PREGUNTAS =====
+// Funcion para copiar las preguntas del array de preguntas a otro que sirve para que se guarden los cambios a la hora de editar las preguntas (hecho con ayuda de IA)
+function copiar_preguntas(array_original) {
+  const copia = [];
+
+  for (let i = 0; i < array_original.length; i++) {
+    const pregunta_original = array_original[i];
+    const opciones_copiadas = [];
+
+    for (let j = 0; j < pregunta_original.opciones.length; j++) {
+      opciones_copiadas.push(pregunta_original.opciones[j]);
+    }
+
+    copia.push({
+      pregunta: pregunta_original.pregunta,
+      opciones: opciones_copiadas,
+      correcta: pregunta_original.correcta
+    });
+  }
+
+  return copia;
+}
+
 function mostrar_edicion() {
   contenedor_edicion.innerHTML = '';
   campos_edicion = [];
 
-  for (let i = 0; i < preguntas.length; i++) {
-    const pregunta_actual = preguntas[i];
+  for (let i = 0; i < preguntas_editando.length; i++) {
+    const pregunta_actual = preguntas_editando[i];
     const bloque_pregunta = document.createElement('div');
     bloque_pregunta.classList.add('bloque_edicion');
 
@@ -181,6 +238,13 @@ function mostrar_edicion() {
       radios_opciones.push(radio_opcion);
     }
 
+    const boton_borrar = document.createElement('button');
+    boton_borrar.textContent = 'Borrar esta pregunta';
+    boton_borrar.addEventListener('click', function () {
+      eliminar_pregunta(i);
+    });
+    bloque_pregunta.appendChild(boton_borrar);
+
     contenedor_edicion.appendChild(bloque_pregunta);
 
     campos_edicion.push({
@@ -191,34 +255,68 @@ function mostrar_edicion() {
   }
 }
 
-function guardar_edicion() {
-  for (let i = 0; i < preguntas.length; i++) {
+// Antes de agrega se guarda lo que el usuario ya había escrito para no perderlo
+ñfunction agregar_pregunta() {
+  guardar_campos_en_editando();
+
+  preguntas_editando.push({
+    pregunta: "Escribe aquí la nueva pregunta",
+    opciones: ["Opción 1", "Opción 2", "Opción 3", "Opción 4"],
+    correcta: 0
+  });
+
+  mostrar_edicion();
+}
+
+function eliminar_pregunta(indice_a_borrar) {
+  guardar_campos_en_editando();
+
+  preguntas_editando.splice(indice_a_borrar, 1);
+  mostrar_edicion();
+}
+
+// La IA me ayudó en estas 2 funciones para que no se pierda lo que el usuario edita y le da a otro boton
+// Lee lo que hay en los inputs y lo guarda en preguntas_editando, para no perder lo escrito cuando se agrega o borra una pregunta
+function guardar_campos_en_editando() {
+  for (let i = 0; i < campos_edicion.length; i++) {
     const campos = campos_edicion[i];
 
-    preguntas[i].pregunta = campos.input_pregunta.value;
+    preguntas_editando[i].pregunta = campos.input_pregunta.value;
 
     for (let j = 0; j < campos.inputs_opciones.length; j++) {
-      preguntas[i].opciones[j] = campos.inputs_opciones[j].value;
+      preguntas_editando[i].opciones[j] = campos.inputs_opciones[j].value;
     }
 
     for (let j = 0; j < campos.radios_opciones.length; j++) {
       if (campos.radios_opciones[j].checked) {
-        preguntas[i].correcta = j;
+        preguntas_editando[i].correcta = j;
       }
     }
+  }
+}
+
+function guardar_edicion() {
+  guardar_campos_en_editando();
+
+  preguntas.length = 0;
+  for (let i = 0; i < preguntas_editando.length; i++) {
+    preguntas.push(preguntas_editando[i]);
   }
 
   cambiar_pantalla(pantalla_inicio);
 }
 
-// ===== 9. EVENTOS DE BOTONES =====
+// Eventos de botones
 boton_empezar.addEventListener('click', function () {
   indice_actual = 0;
+  racha = 0;
+  racha_actual.textContent = '';
   mostrar_pregunta();
   cambiar_pantalla(pantalla_quiz);
 });
 
 boton_editar.addEventListener('click', function () {
+  preguntas_editando = copiar_preguntas(preguntas);
   mostrar_edicion();
   cambiar_pantalla(pantalla_editar);
 });
@@ -237,6 +335,20 @@ boton_reiniciar.addEventListener('click', function () {
   reiniciar_quiz();
 });
 
+boton_reintentar.addEventListener('click', function () {
+  indice_actual = 0;
+  puntaje = 0;
+  racha = 0;
+  racha_mas_alta = 0;
+  racha_actual.textContent = '';
+  mostrar_pregunta();
+  cambiar_pantalla(pantalla_quiz);
+});
+
+boton_agregar_pregunta.addEventListener('click', function () {
+  agregar_pregunta();
+});
+
 boton_guardar_edicion.addEventListener('click', function () {
   guardar_edicion();
 });
@@ -245,5 +357,4 @@ boton_volver_inicio.addEventListener('click', function () {
   cambiar_pantalla(pantalla_inicio);
 });
 
-// ===== 10. ARRANCAR =====
 mostrar_pregunta();

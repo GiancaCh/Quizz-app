@@ -18,11 +18,12 @@
 
     <section id="pantalla_quiz" class="pantalla">
         <p id="contador_pregunta">Pregunta 1 de 5</p>
-        <p id="puntaje_actual">Puntaje: 0</p>
+        <p id="racha_actual"></p>
 
-        <h2 id="texto_pregunta"></h2>
-
-        <div id="contenedor_opciones"></div>
+        <div id="tarjeta_pregunta">
+            <h2 id="texto_pregunta"></h2>
+            <div id="contenedor_opciones"></div>
+        </div>
 
         <p id="texto_feedback"></p>
 
@@ -32,12 +33,15 @@
     <section id="pantalla_resultados" class="pantalla">
         <h2>Resultados</h2>
         <p id="texto_puntaje_final"></p>
-        <button id="boton_reiniciar">Reiniciar Quiz</button>
+        <p id="texto_racha_final"></p>
+        <button id="boton_reintentar">Volver a Intentar</button>
+        <button id="boton_reiniciar">Salir</button>
     </section>
 
     <section id="pantalla_editar" class="pantalla">
         <h2>Editar Preguntas</h2>
         <div id="contenedor_edicion"></div>
+        <button id="boton_agregar_pregunta">Agregar Pregunta</button>
         <button id="boton_guardar_edicion">Guardar Cambios</button>
         <button id="boton_volver_inicio">Volver al Inicio</button>
     </section>
